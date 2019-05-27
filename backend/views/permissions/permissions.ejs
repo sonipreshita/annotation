@@ -1,0 +1,187 @@
+<html>
+
+<head>
+
+    <script type="text/javascript">
+        var TableDatatablesAjax = function () {
+
+            var initPickers = function () {
+                $('#role_id, #status').select2();
+            };
+            var handleRecords = function () {
+                var grid = new Datatable();
+                grid.init({
+                    src: $("#permission_table"),
+                    loadingMessage: 'Loading...',
+                    searching: true,
+                    dataTable: {
+                        "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+                        "lengthMenu": [
+                            [10, 20, 50],
+                            [10, 20, 50] // change per page values here
+                        ],
+                        'searchable': true,
+                        "serverSide": true,
+                        aaSorting: [[0, 'asc']],
+                        "bSortable": true,
+                        ajax: {
+                            url: '/permission',
+                                },
+                                "aoColumns": [
+                                    {
+                                        "data": "#",
+                                        render: function (data, type, row, meta) {
+                                            return meta.row + meta.settings._iDisplayStart + 1;
+                                        }
+                                    },
+                                    { "mData": "title" },
+                                    { "mData": "description" },
+                                    { "mData": "permissionkey" },
+                                    { "mData": "button" },
+                                ],
+                                //"aoColumnDefs": [{ "bSortable": false, "aTargets": [0, 4] }],
+                                "order": [[ 1, 'asc' ]]
+                    }
+                });
+                grid.getTableWrapper().on('change', '.next', function (e) {
+                    e.preventDefault();
+                    grid.setAjaxParam($(this).attr('name'), this.value);
+                    grid.getDataTable().ajax.reload();
+                });
+                grid.getTableWrapper().on('change', '.form-select-filter', function (e) {
+                    e.preventDefault();
+                    grid.setAjaxParam($(this).attr('name'), this.value);
+                    grid.getDataTable().ajax.reload();
+                });
+                grid.getTableWrapper().on('keyup', '.form-filter', function (e) {
+                    e.preventDefault();
+                    if (e.keyCode == 13) {
+                        grid.setAjaxParam($(this).attr('name'), this.value);
+                        grid.getDataTable().ajax.reload();
+                    }
+                });
+                grid.getTableWrapper().on('click', '.filter-cancel', function (e) {
+                    e.preventDefault();
+                    $('#select2-status-container').val("0");
+                });
+                // handle group actionsubmit button click
+                grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                    e.preventDefault();
+                    var action = $(".table-group-action-input", grid.getTableWrapper());
+                    if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                        grid.setAjaxParam("customActionType", "group_action");
+                        grid.setAjaxParam("customActionName", action.val());
+                        grid.setAjaxParam("id", grid.getSelectedRows());
+                        grid.getDataTable().ajax.reload();
+                        grid.clearAjaxParams();
+                    } else if (action.val() == "") {
+                        App.alert({
+                            type: 'danger',
+                            icon: 'warning',
+                            message: 'Please select an action',
+                            container: grid.getTableWrapper(),
+                            place: 'prepend'
+                        });
+                    } else if (grid.getSelectedRowsCount() === 0) {
+                        App.alert({
+                            type: 'danger',
+                            icon: 'warning',
+                            message: 'No record selected',
+                            container: grid.getTableWrapper(),
+                            place: 'prepend'
+                        });
+                    }
+                });
+                grid.setAjaxParam("customActionType", "group_action");
+                grid.clearAjaxParams();
+            };
+
+            return {
+                //main function to initiate the module
+                init: function () {
+                    initPickers();
+                    handleRecords();
+                }
+            };
+        }();
+        jQuery(document).ready(function () {
+            TableDatatablesAjax.init();
+
+        });
+         
+    </script>
+    
+</head>
+
+<body>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/">Home</a> <i class="fa fa-circle"></i>
+            </li>
+            <li><span>Permissions</span></li>
+        </ul>
+    </div>
+       <% flash.get('success').forEach(function (message) { %>
+    <script>
+        toastr.success('<%=(message) %>');
+         toastr.options.timeOut = 1500;
+      </script>
+    <% }) %>
+    <h3 class="page-title">Permissions</h3>
+    <div class="row">
+        <div class="col-md-12">
+             
+            <div class="portlet light portlet-fit portlet-datatable bordered">
+             <div class="portlet-title">
+                    <div class="actions">
+                        <div class="btn-group">
+                             <a href="/permissions/add" class="btn default blue-stripe" title="Add Permission"><i class="fa fa-plus"></i><span class="hidden-xs"> Add Permission</span></a></div>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    
+                    <div class="table-container">
+                    
+                        <table class="table table-striped table-bordered table-hover table-checkable" id="permission_table">
+                            <thead>
+                                <tr role="row" class="heading">
+                                    
+                                    <th width="3%">#</th>
+                                    <th width="16">Title</th>
+                                    <th width="35%">Description</th>
+                                    <th width="21%">Permission key</th>
+                                    <th width="25%">Actions</th>
+                                </tr>
+                                <tr role="row" class="filter">
+                                  <td  name="count"></td>
+                                    <td>
+                                        <input type="text" class="form-control form-filter input-sm" name="perm_title">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-filter input-sm" name="per_description">
+                                    </td>
+                                    <td>
+                                         <input type="text" class="form-control form-filter input-sm" name="permissionkey">
+                                    </td>
+                                  
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm green btn-outline filter-submit margin-bottom"><i class="fa fa-search"></i> Search</button>
+                                             </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm red btn-outline filter-cancel"><i class="fa fa-times"></i> Reset</button>
+                                        </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

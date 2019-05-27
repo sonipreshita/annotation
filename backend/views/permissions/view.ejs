@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+
+<head>
+  <meta charset="utf-8" />
+  <style>
+    #fontstyles {
+      position: relative;
+      /* Helps us control overlap */
+      padding-left: 25px;
+      /* Creates space for the Phone Icon */
+    }
+
+    #fontstyles:after {
+      content: '\f013';
+      font-family: fontAwesome;
+      position: absolute;
+      left: 0;
+      /* Adjust as needed */
+      top: 3px;
+      /* Adjust as needed */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-bar">
+    <ul class="page-breadcrumb">
+      <li>
+        <a href="/">Home
+          </a>
+        <i class="fa fa-circle">
+          </i>
+      </li>
+      <li>
+        <a href="/roles">Roles
+          </a>
+        <i class="fa fa-circle">
+          </i>
+      </li>
+      <li>
+        <a href="">Permissions
+          </a>
+      </li>
+    </ul>
+  </div>
+  <!-- BEGIN PAGE TITLE-->
+  <h3 class="page-title">
+    System Administrator
+    <small>permissions
+      </small>
+  </h3>
+  <!-- END PAGE TITLE-->
+  <!-- END PAGE HEADER-->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="portlet light">
+        <div class="portlet-body form">
+          <div class="form-body">
+            <form action="/permission/edit/<%= permission.roll_id%>" method="post" enctype="multipart/form-data" class="form-horizontal"
+              id="add-rolepermission-form">
+              <div class="portlet-title">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">
+                      <div class="form-section" id="fontstyles" style=" color: white">Private permissions
+                      </div>
+                    </h3>
+                  </div>
+                 
+                  <div class="panel-body">
+                    <h3 class="">Project- <small>Project specific permissions</small>
+                    </h3>
+                    <hr>
+                    <div class="col-md-9">
+                      <p class="form-control-static">
+                        <table>
+                          <% _.each(permission.permission, function (permissions) { %>
+                            <tr>
+                              <td>
+                                 <!--<input type="hidden" id="permissionkey" name="permissionkey" value="<%= permissions.permissionkey %>"> -->
+                                <input type="checkbox" id="array_with_id_values" name="permission_ids" value="<%= permissions.id %>" 
+                                
+                                 <% _.each(permission.permissionIdmap, function (role) { %>
+                                  <% if( role.id == permissions.id) { %> 
+                                checked="checked"
+                                 <% } %>  
+                                <% }) %>
+                                >
+                                <big> <%= permissions.title %> </big>
+                                <br>
+                                <%= permissions.description %> <br>
+                                    <br>
+                              </td>
+                            </tr>
+                            <% }) %>
+                        </table>
+                      </p>
+                    </div>
+
+                  </div>
+
+                  <!--/row-->
+                </div>
+
+              </div>
+          </div>
+          <input type="hidden" id="role_id" name="role_id" value="<%= permission.permission.roll_id%>">
+          <div class="form-actions right">
+            <a href="/roles" class="btn default" title="Cancel"><i class="fa fa-mail-reply"></i>&nbsp;Cancel</a>
+            <button name="submitFormButton" type="submit" id="inputValidate" class="btn blue" title="Update"><i class="fa fa-check"></i> Update</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    //var array = document.getElementsByTagName("input");
+       // $("input:checkbox[value='5a141f55677dd5a00a0303d2']").attr("checked", true);
+  </script>
+</body>
+
+</html>

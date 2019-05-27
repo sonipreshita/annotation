@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+
+<head>
+    <meta charset="utf-8" />
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="/roles">Roles</a>
+                <i class="fa fa-circle"></i>
+            </li>
+                <li>
+                <a href="">Add</a>
+              
+            </li>
+        </ul>
+    </div>
+    <style>
+  
+    </style>
+</head>
+
+<body>
+    <h3 class="page-title">
+       <medium>Add Role</medium></h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                 <div class="portlet-title">
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a href="/roles" class="btn btn-sm default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Back</span></a>                            </div>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <div class="form-body">
+                        <form action="/role/add" method="post" enctype="multipart/form-data" class="form-horizontal" id="add-role-form">
+
+                              <% flash.get('error').forEach(function (message) { %>
+                                     <script>
+                                        toastr.error('<%=(message) %>');
+                                        toastr.options.timeOut = 1500;
+                                    </script>
+                                    <% }) %>
+
+                            <div class="row">
+                                
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Role <span aria-required="true"> * </span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" name="rolename" id="rolename"  placeholder="Enter role name">
+                                            <span id="validRole" style="color:red"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/row-->
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Description<span aria-required="true"> * </span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" name="description" id="description"  placeholder="Enter description">
+                                            <span id="validDescription" style="color:red"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                        </div>
+                                        <br>
+                                      
+                                        </div>
+                                        <div class="form-actions right">
+                                            <a href="/roles"class="btn default" title="Cencel"><i class="fa fa-mail-reply"></i>&nbsp;Cancel</a>
+                        <button name="submitFormButton" type="submit" id="inputValidate" class="btn blue" title="Save"><i class="fa fa-check"></i> Add</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+     <script>
+  
+    var FormValidation = function() {
+
+        var handleValidation = function() {
+
+            var form = $('#add-role-form');
+            var error = $('.alert-danger', form);
+            var success = $('.alert-success', form);
+
+            form.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                    rolename: {
+                        required: true,
+                    },
+                     
+                     description: {
+                        required: true,
+                        noSpace: true
+                    },
+                },
+                messages: {
+                   
+                      rolename: {
+                        required: "Please enter role name.",
+                    },
+                  
+                   description: {
+                       required: "Please enter description.",
+                    },
+                   
+                },
+                invalidHandler: function(event, validator) { //display error alert on form submit              
+                    success.hide();
+                    error.show();
+                },
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+                unhighlight: function(element) { // revert the change done by hightlight
+                    $(element)
+                            .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
+                success: function(label) {
+                    label
+                            .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
+                submitHandler: function(form) {
+                    success.show();
+                    error.hide();
+                    form.submit();
+                },
+            });
+
+        };
+
+        return {
+            init: function() {
+                handleValidation();
+            }
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        FormValidation.init();
+
+        jQuery.validator.addMethod("noSpace", function(value) {
+            return value.trim() != "";
+        });
+        
+    });
+
+		</script>
+</body>
+
+</html>

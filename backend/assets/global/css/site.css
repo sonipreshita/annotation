@@ -1,0 +1,31 @@
+
+
+
+/* general */
+
+/* page */
+
+
+
+/* box */
+
+
+textarea {
+    background-color:#FAFAFA;
+    border:#EFEFEF solid 1px;
+    color:#333;
+    height:150px;
+    width:100%;
+}
+
+
+
+/* richtext custom style */
+.richText {
+ 
+    -webkit-box-shadow: 0 0 20px 0 #999;
+    -moz-box-shadow: 0 0 20px 0 #999;
+    box-shadow: 0 0 20px 0 #999;
+    /*margin-left: auto;*/
+    margin-top: 17px;
+}

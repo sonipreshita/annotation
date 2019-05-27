@@ -1,0 +1,44 @@
+/* here you can put your own css to customize and override the theme */
+.form-group{
+    margin-top:15px !important;
+}
+.login .content .forget-password{margin-top:25px !important;}
+
+.col-md-7 {
+    width: 80.33333% !important;
+}
+.login .content{
+    width: 390px !important;
+}
+.login .contents{
+    background-color: #fff;
+    width: 580px;
+    margin: 0 auto;
+    margin-bottom: 0px;
+    padding: 30px;
+    padding-top: 20px;
+    padding-bottom: 90px !important;
+   
+} 
+ .form{
+    margin-bottom:70px !important;
+}
+.button{
+    margin-top:10px;
+    margin-right:16px;
+}
+.button1{
+    margin-top:10px !important;
+    margin-right:15px !important;
+}
+.col{
+    padding-left:0px;
+    padding-right:0px;
+}
+.control{
+    word-break:break-all;
+} 
+.page{
+    padding-bottom:120px !important;
+}
+

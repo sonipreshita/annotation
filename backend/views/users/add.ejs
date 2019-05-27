@@ -1,0 +1,144 @@
+<html>
+    <head>
+    
+<script>
+    
+function fieldsValidation(e) {
+        
+                var fname = document.getElementById('first-name').value;
+                var lname = document.getElementById('last-name').value;
+                var email = document.getElementById('email').value;
+                var pswd = document.getElementById('password').value;
+               // var cpassword = document.getElementById('cpassword').value;
+                var filter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                var flag = true;
+                if (fname === '' || fname == null) {
+                    flag = false;
+                    document.getElementById("validFname").innerHTML = "Please enter first name.";
+                }
+                if (lname === '' || lname == null) {
+                    flag = false;
+                    document.getElementById("validLname").innerHTML = "Please enter last name.";
+                }
+                 if (pswd ===  '' || pswd== null) {
+                   flag = false;
+                   document.getElementById("validPassword").innerHTML = "Please enter password.";
+                 }
+                
+                if ((!filter.test(email)) || email === '') {
+                    flag = false;
+                    document.getElementById("validEmail").innerHTML = "Please enter email address.";
+                }
+               
+                if (flag === true) {
+                    document.getElementsByName("submitFormButton")[0].type = "submit";
+                    
+                }
+            }</script></head>
+<body>
+<!-- <div class="page-content-wrapper">
+    <div class="page-content"> -->
+        <!-- BEGIN PAGE HEADER-->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <a href="/">Home</a> <i class="fa fa-circle"></i>
+                </li>
+                <li>
+                    <a href="/users">Users</a> <i class="fa fa-circle"></i>
+                </li>
+                <li><span>Add</span></li>
+            </ul>
+        </div>
+        <!-- END PAGE HEADER-->
+        <h3 class="page-title">Add new user</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a href="/users" class="btn btn-sm default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Back</span></a>                                </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <form method="post" accept-charset="utf-8" class="form-horizontal" id="user-form" action="/createusers" novalidate="novalidate">
+                            <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+                            <div class="form-body">
+                                <h3 class="form-section">Person Info</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3">First Name<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                                <div class="input text required" aria-required="true">
+                                                    <input type="text" name="fname" class="form-control" placeholder="Enter first name of user e.g. John" required="required"
+                                                        maxlength="50" id="first-name" aria-required="true">
+                                                        <% if(typeof error != 'undefined' && error.fname ) { %>
+                                                            <span style="color:red"><%= error.fname[0].message %></span>
+                                                            <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3">Last Name<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                                <div class="input text required" aria-required="true"><input type="text" name="lname" class="form-control" placeholder="Enter last name of user e.g. Doe"
+                                                        required="required" maxlength="50" id="last-name" aria-required="true">
+                                                        <% if(typeof error != 'undefined' && error.lname ) { %>
+                                                            <span style="color:red"><%= error.lname[0].message %></span>
+                                                            <% } %>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <!--/row-->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Email<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                                <div class="input email required" aria-required="true"><input type="email" name="email" class="form-control" placeholder="Enter email address of user e.g. john@example.com"
+                                                        required="required" maxlength="255" id="email" aria-required="true" aria-invalid="false"
+                                                        aria-describedby="email-error">
+                                                        <% if(typeof error != 'undefined' ) { %>
+                                                            <span style="color:red"><%= error.email[0].message %></span>
+                                                            <% } %>
+                                                        <span id="email-error" class="help-block help-block-error"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3">Password<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                                <div class="input password required" aria-required="true"><input type="password" name="pswd" class="form-control" placeholder="Enter password"
+                                                        required="required" id="password" aria-required="true">
+                                                        <% if(typeof error != 'undefined' && error.pswd ) { %>
+                                                            <span style="color:red"><%= error.pswd[0].message %></span>
+                                                            <% } %>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                            </div>
+                            <div class="form-actions right">
+                                <a href="/users" class="btn default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Cancel</span></a>
+                                <button type="submit" onclick="fieldsValidation()" class="btn green"><i class="fa fa-check"></i><span class="hidden-xs"> Save</span></button>                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- </div>
+</div> -->
+</body>
+</html>

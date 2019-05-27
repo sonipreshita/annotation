@@ -1,0 +1,288 @@
+<html>
+
+<head>
+<style>
+    SELECT, INPUT[type="text"] {
+    width: 240px;
+    box-sizing: border-box;
+}
+@media (max-width: 1139px) {
+   .duallist{
+       width: 513px;
+    margin-left: 12px;
+   }
+    #teamname{
+            width: 249px;
+      }
+}
+@media (max-width: 919px) {
+   .duallist{
+         width: 75px;
+        margin-left: 37px;
+   }
+     #teamname{
+            width: 250px;
+      }
+}
+@media (max-width: 559px) {
+      #teamname{
+            width: 205px;
+      }
+
+}
+#rightValues-error{
+        width: max-content;
+}
+SECTION > DIV {
+    float: left;
+    padding: 4px;
+}
+SECTION > DIV + DIV {
+    width: 40px;
+    text-align: center;
+}
+#rightValues{
+    height: 105px;
+}
+
+</style>
+</head>
+
+<body>
+    <!-- <div class="page-content-wrapper">
+    <div class="page-content"> -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/">Home</a> <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="/teams">Teams</a> <i class="fa fa-circle"></i>
+            </li>
+            <li><span>Add</span></li>
+        </ul>
+    </div>
+    <!-- END PAGE HEADER-->
+    <h3 class="page-title">Add new team</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a href="/teams" class="btn btn-sm default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Back</span></a>                            </div>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <form method="post" accept-charset="utf-8" class="form-horizontal" id="add-team-form" action="/teams/add" novalidate="novalidate">
+                        <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+                        <div class="form-body">
+                            <h3 class="form-section">Team Info</h3>
+                            <div class="row">
+                                <% flash.get('error').forEach(function (message) { %>
+                                     <script>
+                                        toastr.error('<%=(message) %>');
+                                        toastr.options.timeOut = 1500;
+                                    </script>
+                                    <% }) %>
+                                        <div class="col-md-6">
+                                            <div class="form-group ">
+                                                <label class="control-label col-md-3">User<span aria-required="true"> * </span></label>
+                                                <div class="col-md-9">
+                                                  
+                                                        <select class="form-control" name="user_id" id="user_id" required>
+                                                <option value="">Select User</option>
+                                                  <% _.each(team.user, function (user) { %>
+                                                    <option value=<%= user.id %> ><%= user.first_name %></option>
+                                                <% }) %>
+                                        </select>
+                                                        <span id="validRole" style="color:red"></span>
+
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group ">
+                                                <label class="control-label col-md-3">Team Name<span aria-required="true"> * </span></label>
+                                                <div class="col-md-9">
+                                                    
+                                                        <input type="text" id = "teamname" name="teamname" class="form-control" placeholder="Enter team name" required="required"
+                                                            maxlength="50" id="teamname" aria-required="true">
+                                                        <span id="validFname" style="color:red"></span>
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                            </div>
+                            <div class="row">
+
+                                <!--/span-->
+
+                                <!--/span-->
+                            </div>
+                            <!--/row-->
+                            <div class="row">
+                                
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Members<span aria-required="true"> * </span></label>
+                                       
+                                            
+                                                <section class="duallist">
+                                                <div>
+                                                    <select id="leftValues" size="5" multiple >
+                                                     <% _.each(team.member, function (member) { %>
+                                                    <option value=<%= member.id %> ><%= member.email %></option>
+                                                <% }) %>
+                                                    </select>
+
+                                                </div>
+                                                <div>
+                                                    <input type="button" id="btnLeft" value="&lt;&lt;" />
+                                                    <input type="button" id="btnRight" value="&gt;&gt;" />
+                                                </div>
+                                                <div>
+                                                    <select id="rightValues" size="4" multiple name="member_id" id="member_id" class="selectedmembers">
+                                                   
+                                                </select>
+                                                 
+                                                    <div>
+                                                         
+                                                        <!--<input type="text" id="txtRight" />-->
+                                                    </div>
+                                                <span id="validLists" style="color:red;position: absolute;"></span>
+                                                </div>
+                                                
+                                            </section>
+                                          
+                                            
+                                        
+                                    </div>
+                                    <!--/span-->
+
+                                    <!--/span-->
+                               
+                            </div>
+                            <div class="form-actions right">
+                                <a href="/teams" class="btn default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Cancel</span></a>
+                                <button type="submit" id = "inputValidate" name="submitFormButton"  class="btn green"><i class="fa fa-check"></i><span class="hidden-xs"> Save</span></button>                                </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- </div>
+</div> -->
+        <script type="text/javascript">
+     
+    
+        $("#inputValidate").click(function () {
+            var selectedItem = $('#rightValues').children().attr('selected', true);
+            $("#rightValues").append(selectedItem);
+            
+            
+        });
+           $("#btnLeft").click(function () {
+    var selectedItem = $("#rightValues option:selected");
+    $("#leftValues").append(selectedItem);
+       var itemselected = $('#rightValues').children().attr('selected', true);
+            $("#rightValues").append(itemselected);
+});
+
+$("#btnRight").click(function () {
+    var selectedItem = $("#leftValues option:selected");
+    $("#rightValues").append(selectedItem);
+});
+
+$("#rightValues").change(function () {
+    var selectedItem = $("#rightValues option:selected");
+    $("#txtRight").val(selectedItem.text());
+});
+
+    var FormValidation = function() {
+
+        var handleValidation = function() {
+
+            var form = $('#add-team-form');
+            var error = $('.alert-danger', form);
+            var success = $('.alert-success', form);
+
+            form.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                    user_id: {
+                        required: true,
+                    },
+                     
+                     teamname: {
+                        required: true,
+                    },
+                       member_id: {
+                        required: true,
+                    },
+                },
+                messages: {
+                   
+                      user_id: {
+                        required: "Please select user.",
+                    },
+                  
+                   teamname: {
+                       required: "Please enter team name.",
+                    },
+                     member_id: {
+                       required: "Please select member.",
+                       
+                    },
+                   
+                },
+                invalidHandler: function(event, validator) { //display error alert on form submit              
+                    success.hide();
+                    error.show();
+                },
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                            .closest('.form-group').addClass('has-error')// set error class to the control group
+                            
+            },
+                unhighlight: function(element) { // revert the change done by hightlight
+                    $(element)
+                            .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
+                success: function(label) {
+                    label
+                            .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
+                submitHandler: function(form) {
+                    success.show();
+                    error.hide();
+                    form.submit();
+                },
+            });
+
+        };
+
+        return {
+            init: function() {
+                handleValidation();
+            }
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        FormValidation.init();
+
+        jQuery.validator.addMethod("noSpace", function(value) {
+            return value.trim() != "";
+        });
+        
+    });
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,197 @@
+<html>
+    <head>
+</head>
+<body>
+<!-- <div class="page-content-wrapper">
+    <div class="page-content"> -->
+        <!-- BEGIN PAGE HEADER-->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <a href="/">Home</a> <i class="fa fa-circle"></i>
+                </li>
+                <li>
+                    <a href="/members">Members</a> <i class="fa fa-circle"></i>
+                </li>
+                <li><span>Add</span></li>
+            </ul>
+        </div>
+        <!-- END PAGE HEADER-->
+        <h3 class="page-title">Add new member</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a href="/members" class="btn btn-sm default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Back</span></a>                                </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <form method="post" accept-charset="utf-8" class="form-horizontal" id="add-member-form" action="/members/add" novalidate="novalidate">
+                            <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+                            <div class="form-body">
+                                <h3 class="form-section">Member Info</h3>
+                                 <div class="row">
+                                      <% flash.get('error').forEach(function (message) { %>
+                                        <script>
+                                            toastr.error('<%=(message) %>');
+                                            toastr.options.timeOut = 1500;
+                                        </script>
+                                        <% }) %>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3">User<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                                
+                                               
+                                                   <select class="form-control" name="user_id" id="user_id" required>
+                                                <option value="">Select User</option>
+                                                <% _.each(users, function (user) { %>
+                                                    <option value=<%= user.id %> ><%= user.first_name %></option>
+                                                <% }) %>
+                                        </select>
+                                            <span id="validRole" style="color:red"></span>
+
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3">First Name<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                               
+                                                    <input type="text" name="fname" class="form-control" placeholder="Enter first name of member" required="required"
+                                                        maxlength="50" id="firstname" aria-required="true">
+                                                        <span id="validFname" style="color:red"></span>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3">Last Name<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                              
+                                                    <input type="text" name="lname" class="form-control" placeholder="Enter last name of member"
+                                                        required="required" maxlength="50" id="lastname" aria-required="true">
+                                                        <span id="validLname" style="color:red"></span>
+                                                    </div>
+                                        
+                                        </div>
+                                    </div>
+                                        <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Email<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                              <input type="email" name="email" class="form-control" placeholder="Enter email address of member"
+                                                        required="required" maxlength="255" id="email" aria-required="true" aria-invalid="false"
+                                                        aria-describedby="email-error">
+                                                       <span id="validEmail" style="color:red"></span>
+                                            </div>
+                                        
+                                    </div>
+                                    <!--/span-->
+                                 
+                                    <!--/span-->
+                                </div>
+                                    <!--/span-->
+                                </div>
+                                <!--/row-->
+                                
+                            <div class="form-actions right">
+                                <a href="/members" class="btn default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Cancel</span></a>
+                                <button type="submit"  name="submitFormButton"  onclick="fieldsValidation()" class="btn green"><i class="fa fa-check"></i><span class="hidden-xs"> Save</span></button>                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- </div>
+</div> -->
+        <script>
+         
+         var FormValidation = function() {
+
+        var handleValidation = function() {
+
+            var form = $('#add-member-form');
+            var error = $('.alert-danger', form);
+            var success = $('.alert-success', form);
+            form.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                     user_id: {
+                        required: true
+                    },
+                     fname: {
+                        required: true
+                    },
+                     lname: {
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                   
+                },
+                messages: {
+                     user_id: {
+                        required: 'Please select user.',
+                    },
+                     fname: {
+                        required: 'Please enter first name.',
+                    },
+                     lname: {
+                        required: 'Please enter last name.',
+                    },
+                    email: {
+                        required: 'Please enter email.',
+                        email: 'Plaese enter valid email.'
+                    },
+                   
+                },
+                 invalidHandler: function(event, validator) { //display error alert on form submit              
+                    success.hide();
+                    error.show();
+                },
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+                unhighlight: function(element) { // revert the change done by hightlight
+                    $(element)
+                            .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
+                success: function(label) {
+                    label
+                            .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
+                submitHandler: function(form) {
+                    success.show();
+                    error.hide();
+                    form.submit();
+                },
+            });
+        };
+        return {
+            init: function() {
+                handleValidation();
+            }
+        };
+    }();
+    jQuery(document).ready(function() {
+        FormValidation.init();
+    });
+        </script>
+</body>
+</html>

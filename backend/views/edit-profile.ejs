@@ -1,0 +1,288 @@
+<html>
+	<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js">
+              </script>
+		
+	</head>
+	<body>
+		<div class="page-bar">
+			<ul class="page-breadcrumb">
+				<li>
+					<a href="/">Home</a>
+					<i class="fa fa-circle"></i>
+				</li>
+				<li>
+					<span>Edit Profile</span>
+				</li>
+			</ul>
+		</div>
+		<% flash.get('error').forEach(function (message) { %>
+			<script>
+				toastr.error('Current password is not matched.');
+				toastr.options.timeOut = 1500;
+			</script>
+			<% }) %>
+				<h3 class="page-title">
+					<%= admin.fname  %> <%= admin.lname  %>
+						<small>edit profile</small>
+		</h3>
+
+						<form method="post" enctype="multipart/form-data" accept-charset="utf-8" class="form-horizontal" id="edit-profile-form" action="/edit-profile"
+                        novalidate="novalidate">
+							<div class="form-body">
+								<div class="row">
+									 <% flash.get('error').forEach(function (message) { %>
+                                    <div class="alert alert-danger">
+                                        <button class="close" data-close="alert"></button>
+                                        <span> <%= message %> </span>
+                                    </div>
+                                    <% }) %>
+                                   
+                                    <div class="col-md-3" id="image" style="display:block">
+                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                        <img src="/images/<%= admin.image %>" alt="" value="<%= admin.image %>"	/>
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                    <div>
+                                        <span class="btn default btn-file"><span class="fileinput-new"> Select image </span>
+                                        <span class="fileinput-exists"> Change </span>
+                                        <input type="file" name="uploadFile" id="uploadFile"> </span>
+                                        <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                    </div>
+
+                                </div>
+                                    </div>
+                                    <div class="col-md-7">
+										<div id="admindetails" style="display:block">
+											<div class="col-md-12">
+												<div class="form-group ">
+													<label class="control-label col-md-3">User Name
+														<span aria-required="true" class="required"> * </span>
+													</label>
+													<div class="col-md-9">
+														<div class="input text " aria-required="true">
+															<input type="text" name="username" class="form-control" placeholder="Enter user name"
+                                                            required="required" maxlength="255" id="name" value="<%= admin.fname  %> <%= admin.lname  %>"
+                                                            aria-required="true">
+															 <span id="vaildUsername" style="color:red"></span>
+
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-12">
+													<div class="form-group ">
+														<label class="control-label col-md-3">Email
+															<span aria-required="true" class="required"> * </span>
+														</label>
+														<div class="col-md-9">
+															<div class="input email" aria-required="true">
+																<input type="email" name="email" class="form-control" placeholder="Enter email"
+                                                            required="required" maxlength="255" id="email" value="<%= admin.email %>"
+                                                            aria-required="true">
+															 <span id="validEmail" style="color:red"></span>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-12">
+													<div class="form-group ">
+														<label class="control-label col-md-3">Current Password
+		
+														</label>
+														<div class="col-md-9">
+															
+                                                        <div class="input password"><input type="password" name="current_password" class="form-control" placeholder="Enter Password"
+                                                                id="current_password"></div>
+                                                    	 <span id="validPassword" style="color:red"></span>
+															</div>
+														</div>
+													</div>
+													
+											 <div class="col-md-12">
+													 <div class="form-group ">
+                                                    <label class="control-label col-md-3">New Password</label>
+                                                    <div class="col-md-9 ">
+                                                        <div class="input-group">
+                                                            <div class="">
+                                                                <div class="input password"><input type="password" name="new_password" class="form-control" id="new_password"
+                                                                        placeholder="Enter new password"></div>
+                                                            </div>
+                                                            <span class="input-group-btn generate-password-block">
+                                    <button onclick="generateToken()" id="genpassword" class="btn btn-success generate_password" type="button">
+                                    <i class="fa fa-arrow-left fa-fw"></i> Generate Password</button>
+                                    </span>
+										
+                                                        </div>
+														 <span id="vaildNewpass" style="color:red"></span>
+                                                    </div>
+                                                </div>
+													</div>
+                                          <div class="col-md-12">
+                                                <div class="form-group ">
+                                                    <label class="control-label col-md-3">Confirm Password</label>
+                                                    <div class="col-md-9 ">
+                                                        <div class="input password"><input type="password" name="confirm_password" class="form-control" placeholder="Enter confirm password"
+                                                                id="confirm-password"></div>
+																	 <span id="validConfpass" style="color:red"></span>
+                                                    </div>
+                                                </div>
+												<div class="col-md-12 generated-password hidden">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Generated Password</label>
+                                    <div class="col-md-9 password-value help-block" style="margin-top: 8px"></div>
+                                </div>
+                            </div>
+                                            </div>
+													
+												</div>
+												<!-- <div class="col-md-12"><div class="form-group "><label class="control-label col-md-3">Current Password</label><div class="col-md-9"><div class="input password"><input type="password" name="current_password" class="form-control" placeholder="Enter Password"
+                                        id="password"></div></div></div></div><div class="col-md-12"><div class="form-group "><label class="control-label col-md-3">New Password</label><div class="col-md-9"><div class="input-group"><div class=""><div class="input password"><input type="password" name="new_password" class="form-control" id="new_password"
+                                                placeholder="Enter new password"></div></div><span class="input-group-btn generate-password-block"><button onclick="generateToken()" id="genpassword" class="btn btn-success generate_password" type="button"><i class="fa fa-arrow-left fa-fw"></i> Generate Password</button></span></div></div></div></div><div class="col-md-12"><div class="form-group "><label class="control-label col-md-3">Confirm Password</label><div class="col-md-9"><div class="input password"><input type="password" name="confirm_password" class="form-control" placeholder="Enter confirm password"
+                                        id="cpassword"></div></div></div></div><div class="col-md-12 generated-password hidden" id="ifYes"><div class="form-group"><label class="control-label col-md-3">Generated Password</label><div class="col-md-9 password-value help-block" style="margin-top: 8px"></div><span id="gPassword"></span></div></div></div></div></div> -->
+												 
+												
+												 <div class="form-actions right" style="float:right;margin-right:15px">
+                                <a href="/" class="btn default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Cancel</span></a>
+                                <button type="submit" name="submitbtn" class="btn green"><i class="fa fa-check"></i><span class="hidden-xs"> Update</span></button>                              
+								  </div>
+											</form>
+
+											<script>
+
+    /** 
+     *  Generate Random String for Password
+     */
+    function passwordGenerator(no)
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-";
+        for (var i = 0; i < no; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+    }
+  
+    var FormValidation = function() {
+
+        var handleValidation = function() {
+
+            var form = $('#edit-profile-form');
+            var error = $('.alert-danger', form);
+            var success = $('.alert-success', form);
+
+            form.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                    username: {
+                        required: true,
+                        noSpace: true
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+					   'current_password': {
+                         required: false,
+                      
+                    },
+                    'avatar': {
+                        extension: "jpg|jpeg|bmp|gif|png"
+                    },
+                    'confirm_password': {
+                        equalTo: "#new_password"
+                    },
+                    'new_password': {
+                        customPassword: false
+                    }
+                },
+                messages: {
+                    username: {
+                        required: "Please enter user name.",
+                        noSpace: "username can not be empty."
+                    },
+                    email: {
+                        required: "Please enter email address.",
+                        email: "Please enter valid email address.",
+                        remote: "Email already exists."
+                    },
+                    'avatar': {
+                        extension: "Image must be in jpg, jpeg, bmp, gif or png format."
+                    },
+                    'confirm_password': {
+                        equalTo: "Password does not match."
+                    },
+                   
+                },
+                invalidHandler: function(event, validator) { //display error alert on form submit              
+                    success.hide();
+                    error.show();
+                },
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+                unhighlight: function(element) { // revert the change done by hightlight
+                    $(element)
+                            .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
+                success: function(label) {
+                    label
+                            .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
+                submitHandler: function(form) {
+                    success.show();
+                    error.hide();
+                    form.submit();
+                },
+                errorPlacement: function(error, element) {
+                    if (element.attr("name") == "new_password") {
+                        error.insertAfter(element.parent("div").parent("div"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
+
+        };
+
+        return {
+            init: function() {
+                handleValidation();
+            }
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        FormValidation.init();
+
+        $('.generate_password').click(function() {
+            var text = passwordGenerator(10);
+            $('.password-value').text(text);
+            $('.generated-password').removeClass('hidden').show();
+
+            $('#new_password').val(text);
+            $('#confirm-password').val(text);
+        });
+        jQuery.validator.addMethod("noSpace", function(value) {
+            return value.trim() != "";
+        });
+        jQuery.validator.addMethod("customPassword", function(value, element) {
+            return this.optional(element);
+        });
+          $('#confirm-password').keyup(
+            function() {
+               if($('#confirm-password').val().length == 0){
+                $('.generated-password').addClass('hidden');
+               }
+            });
+    });
+
+		</script>
+										
+						</body>
+					</html>

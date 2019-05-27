@@ -1,0 +1,116 @@
+<!-- BEGIN PAGE BAR -->
+<html>
+    <head>
+        <style>
+            .alert-success {
+                width: 270px;
+            }
+        </style>
+    </head>
+    <body>
+       
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <span>Home</span>
+        </li>
+    </ul>
+</div>
+<% flash.get('success').forEach(function (message) { %>
+    <script>
+        toastr.success('You have successfully logged in');
+         toastr.options.timeOut = 1500;
+      </script>
+    <% }) %>
+     <% flash.get('update').forEach(function (message) { %>
+    <script>
+        toastr.success('Profile updated successfully.');
+         toastr.options.timeOut = 1500;
+      </script>
+    <% }) %>
+      <% flash.get('password').forEach(function (message) { %>
+    <script>
+        toastr.success('Password updated successfully.');
+         toastr.options.timeOut = 1500;
+      </script>
+    <% }) %>
+        <!-- END PAGE BAR -->
+
+<!-- BEGIN PAGE TITLE-->
+<h3 class="page-title"> Dashboard
+    <small>dashboard & statistics</small>
+</h3>
+<!-- END PAGE TITLE-->
+
+<!-- BEGIN DASHBOARD STATS 1-->
+<div class="row">
+                   
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat purple">
+            <div class="visual">
+                <i class="fa fa-globe"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="<%- userCount %>"></span></div>
+                <div class="desc">Users</div>
+            </div>
+            <a class="more" href="/users"> View more
+												<i class="m-icon-swapright m-icon-white"></i>
+											</a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat green">
+            <div class="visual">
+                <i class="fa fa-globe"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="<%- projectCount %>"></span></div>
+                <div class="desc">Projects</div>
+            </div>
+            <a class="more" href="/projects"> View more
+												<i class="m-icon-swapright m-icon-white"></i>
+											</a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat blue">
+            <div class="visual">
+                <i class="fa fa-globe"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="<%- memberCount %>"></span></div>
+                <div class="desc">Members</div>
+            </div>
+            <a class="more" href="/members"> View more
+												<i class="m-icon-swapright m-icon-white"></i>
+											</a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="dashboard-stat red">
+            <div class="visual">
+                <i class="fa fa-globe"></i>
+            </div>
+            <div class="details">
+                <div class="number">
+                    <span data-counter="counterup" data-value="<%- teamCount %>"></span></div>
+                <div class="desc">Teams</div>
+            </div>
+            <a class="more" href="/teams"> View more
+												<i class="m-icon-swapright m-icon-white"></i>
+											</a>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<!-- END DASHBOARD STATS 1-->
+
+    </body>
+</html>

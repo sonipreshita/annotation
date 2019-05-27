@@ -1,0 +1,190 @@
+<html>
+    <head>
+</head>
+<body>
+<!-- <div class="page-content-wrapper">
+    <div class="page-content"> -->
+        <!-- BEGIN PAGE HEADER-->
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <a href="/">Home</a> <i class="fa fa-circle"></i>
+                </li>
+                <li>
+                    <a href="/permissions">Permissions</a> <i class="fa fa-circle"></i>
+                </li>
+                <li><span>Add</span></li>
+            </ul>
+        </div>
+        <!-- END PAGE HEADER-->
+        <h3 class="page-title">Add New Permission Object</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a href="/permissions" class="btn btn-sm default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Back</span></a>  
+                           </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <form method="post" accept-charset="utf-8" class="form-horizontal" id="add-permission-form" action="/permission/add" novalidate="novalidate">
+                            <div class="form-body">
+                                <h3 class="form-section">Permission Info</h3>
+                                 <div class="row">
+                                    <% flash.get('error').forEach(function (message) { %>
+                                     <script>
+                                        toastr.error('<%=(message) %>');
+                                        toastr.options.timeOut = 1500;
+                                    </script>
+                                    <% }) %>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3">Title<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                               
+                                                    <input type="text" name="per_title" class="form-control" placeholder="Enter permission title" required="required"
+                                                         id="per_title" aria-required="true">
+
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3">Controller<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                              
+                                                    <input type="text" name="per_controller" class="form-control" placeholder="Enter controller name"
+                                                        required="required" id="per_controller" aria-required="true">
+                                
+                                                    </div>
+                                        
+                                        </div>
+                                    </div>
+                                 </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-6">
+                                         <div class="form-group ">
+                                            <label class="control-label col-md-3">Description<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                               
+                                                  <textarea name="per_description" class="form-control" placeholder="Enter description" required="required" maxlength="1024" id="per_description" rows="5"></textarea>
+                                 
+                                                    </textarea>
+                                                       
+                                                
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+                                        <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Action<span aria-required="true"> * </span></label>
+                                            <div class="col-md-9">
+                                              <input type="text" name="per_action" class="form-control" placeholder="Enter action name" 
+                                                        required="required" id="per_action" aria-required="true">
+                                                      
+                                                      
+                                            </div>
+                                        
+                                    </div>
+                                    <!--/span-->
+                                 
+                                    <!--/span-->
+                                </div>
+                                    <!--/span-->
+                                </div>
+                                <!--/row-->
+                                
+                            <div class="form-actions right">
+                                <a href="/permissions" class="btn default"><i class="fa fa-mail-reply"></i><span class="hidden-xs"> Cancel</span></a>
+                                <button type="submit"  name="submitFormButton"  class="btn green"><i class="fa fa-check"></i><span class="hidden-xs"> Save</span></button>                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- </div>
+</div> -->
+        <script>
+         
+         var FormValidation = function() {
+
+        var handleValidation = function() {
+
+            var form = $('#add-permission-form');
+            var error = $('.alert-danger', form);
+            var success = $('.alert-success', form);
+            form.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                     per_title: {
+                        required: true
+                    },
+                     per_controller: {
+                        required: true
+                    },
+                     per_description: {
+                        required: true
+                    },
+                    per_action: {
+                        required: true,
+                    },
+                   
+                },
+                messages: {
+                     per_title: {
+                        required: 'Please enter permission title.',
+                    },
+                     per_controller: {
+                        required: 'Please enter controller name.',
+                    },
+                     per_description: {
+                        required: 'Please enter description.',
+                    },
+                    per_action: {
+                        required: 'Please enter action name.',
+                    },
+                   
+                },
+                 invalidHandler: function(event, validator) { //display error alert on form submit              
+                    success.hide();
+                    error.show();
+                },
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+                unhighlight: function(element) { // revert the change done by hightlight
+                    $(element)
+                            .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
+                success: function(label) {
+                    label
+                            .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
+                submitHandler: function(form) {
+                    success.show();
+                    error.hide();
+                    form.submit();
+                },
+            });
+        };
+        return {
+            init: function() {
+                handleValidation();
+            }
+        };
+    }();
+    jQuery(document).ready(function() {
+        FormValidation.init();
+    });
+        </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<html>
+
+<head>
+    <!-- <script src="https://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>-->
+    <script type="text/javascript">
+        var TableDatatablesAjax = function () {
+
+            var initPickers = function () {
+                $('#role_id, #status').select2();
+            };
+            var handleRecords = function () {
+                var grid = new Datatable();
+                grid.init({
+                    src: $("#projects_table"),
+                    loadingMessage: 'Loading...',
+                    searching: true,
+                    dataTable: {
+                        "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+                        "lengthMenu": [
+                            [10, 20, 50],
+                            [10, 20, 50] // change per page values here
+                        ],
+                        'searchable': true,
+                        "serverSide": true,
+                        aaSorting: [[0, 'asc']],
+                        "bSortable": true,
+                        ajax: {
+                            url: '/project/project-list',
+                        },
+                        
+                        "aoColumns": [
+                                { "mData": "checkbox" },
+                                { "mData": "name" },
+                                {
+                                    "mData": function (data, type, row) { 
+                                        return '<img height="50px" width="50px" src="/images/'+data.image+'"/>';
+                                },
+                                },
+                                { "mData": "status" },
+                                { "mData": "notification_status" },
+                                { "mData": "description" },
+                                { "mData": "button" },
+                            ],
+                        //"aoColumnDefs": [{ "bSortable": false, "aTargets": [0, 4] }],
+                        "order": [
+                            [0, "desc"]
+                        ]
+                    }
+                });
+                grid.getTableWrapper().on('change', '.next', function (e) {
+                    e.preventDefault();
+                    grid.setAjaxParam($(this).attr('name'), this.value);
+                    grid.getDataTable().ajax.reload();
+                });
+                grid.getTableWrapper().on('change', '.form-select-filter', function (e) {
+                    e.preventDefault();
+                    grid.setAjaxParam($(this).attr('name'), this.value);
+                    grid.getDataTable().ajax.reload();
+                });
+                grid.getTableWrapper().on('keyup', '.form-filter', function (e) {
+                    e.preventDefault();
+                    if (e.keyCode == 13) {
+                        grid.setAjaxParam($(this).attr('name'), this.value);
+                        grid.getDataTable().ajax.reload();
+                    }
+                });
+                grid.getTableWrapper().on('click', '.filter-cancel', function (e) {
+                    e.preventDefault();
+                    $('#select2-status-container').val("0");
+                });
+                // handle group actionsubmit button click
+                grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                    e.preventDefault();
+                    var action = $(".table-group-action-input", grid.getTableWrapper());
+                    if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                        grid.setAjaxParam("customActionType", "group_action");
+                        grid.setAjaxParam("customActionName", action.val());
+                        grid.setAjaxParam("id", grid.getSelectedRows());
+                        grid.getDataTable().ajax.reload();
+                        grid.clearAjaxParams();
+                    } else if (action.val() == "") {
+                        App.alert({
+                            type: 'danger',
+                            icon: 'warning',
+                            message: 'Please select an action',
+                            container: grid.getTableWrapper(),
+                            place: 'prepend'
+                        });
+                    } else if (grid.getSelectedRowsCount() === 0) {
+                        App.alert({
+                            type: 'danger',
+                            icon: 'warning',
+                            message: 'No record selected',
+                            container: grid.getTableWrapper(),
+                            place: 'prepend'
+                        });
+                    }
+                });
+                grid.setAjaxParam("customActionType", "group_action");
+                grid.clearAjaxParams();
+            };
+
+            return {
+                //main function to initiate the module
+                init: function () {
+                    initPickers();
+                    handleRecords();
+                }
+            };
+        }();
+        jQuery(document).ready(function () {
+            TableDatatablesAjax.init();
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/">Home</a> <i class="fa fa-circle"></i>
+            </li>
+            <li><span>Project</span></li>
+        </ul>
+    </div>
+      <% flash.get('delete').forEach(function (message) { %>
+    <script>
+        toastr.success('Project has been deleted.');
+         toastr.options.timeOut = 1500;
+      </script>
+    <% }) %>
+    <h3 class="page-title">Projects</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light portlet-fit portlet-datatable bordered">
+                <div class="portlet-title">
+                    
+                </div>
+                <div class="portlet-body">
+                    
+                    <div class="table-container">
+                        <div class="table-actions-wrapper">
+                            <span> </span>
+                            <select name="project_status" class="table-group-action-input form-control input-inline input-small input-sm">
+                                                    <option value="" >Select Status</option>
+                                                    <option value="1">Active</option>
+                                                    <option value="2">Inactive</option>
+                                                    </select>
+                            <button class="btn btn-sm green table-group-action-submit" name="statuscheck">
+                                                <i class="fa fa-check"></i> Submit</button>
+
+                        </div>
+                        <table class="table table-striped table-bordered table-hover table-checkable" id="projects_table">
+                            <thead>
+                                <tr role="row" class="heading">
+                                    <th width="2%">
+                                        <div class="checker"><span>  <input type="checkbox" class="group-checkable"></span></div>
+                                    </th>
+                                    <th width="15%">Name</th>
+                                    <th width="">Image</th>
+                                    <th width="15%">Status</th>
+                                    <th width="15%">Notification-status</th>
+                                    <th width="15%">Description</th>
+                                    <th width="20%">Actions</th>
+                                </tr>
+                                <tr role="row" class="filter">
+                                    <td> </td>
+                                    <td>
+                                        <input type="text" class="form-control form-filter input-sm" name="project_name">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-filter input-sm" name="project_image">
+                                    </td>
+                                    <td>
+                                        <div class="input select">
+                                            <select name="project_status" id="select2-status-container" class="select2 select2-offscreen form-control form-select-filter input-sm"
+                                                placeholder="Choose a status">
+                                                    <option value="">Select Status</option>
+                                                    <option value="1">Active</option>
+                                                    <option value="2">Inactive</option>
+                                                </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input select">
+                                            <select name="notification_status" id="select2-notification-container" class="select2 select2-offscreen form-control form-select-filter input-sm"
+                                                placeholder="Choose a status">
+                                                        <option value="">Select Project Status</option>
+                                                        <option value="1">On hold</option>
+                                                        <option value="2">In Progress</option>
+                                                        <option value="3">Need To Review</option>
+                                                        <option value="4">Approved</option>
+                                                    </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-filter input-sm" name="project_desc">
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm green btn-outline filter-submit margin-bottom"><i class="fa fa-search"></i> Search</button>
+                                             </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm red btn-outline filter-cancel"><i class="fa fa-times"></i> Reset</button>
+                                        </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+{
+  "name": "annotation-tool",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.16.2",
+    "jquery": "^3.2.1",
+    "material-ui": "^0.19.2",
+    "moment": "^2.18.1",
+    "multi-select": "^0.3.4",
+    "react": "^15.6.1",
+    "react-awesome-modal": "^2.0.1",
+    "react-bootstrap-datatable": "^1.0.0",
+    "react-bootstrap-table": "^4.0.5",
+    "react-confirm-alert": "^1.0.7",
+    "react-dom": "^15.6.1",
+    "react-dropzone": "^4.1.3",
+    "react-dropzone-component": "^2.0.0",
+    "react-jquery-datatables": "^0.7.1",
+    "react-json-table": "^0.1.1",
+    "react-modal-bootstrap": "^1.1.1",
+    "react-modal-dialog": "^4.0.7",
+    "react-router": "^2.6.0",
+    "react-scripts": "1.0.13",
+    "react-select": "^1.0.0-rc.5",
+    "react-select-box": "^3.0.1",
+    "react-select-plus": "^1.0.0-rc.5",
+    "react-slick": "^0.23.1",
+    "react-tap-event-plugin": "^2.0.1",
+    "react-toastify": "^2.0.0",
+    "sails.io.js": "^1.1.12",
+    "select2": "^4.0.4",
+    "simple-react-modal": "^0.5.1",
+    "socket.io-client": "^2.0.3",
+    "universal-cookie": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
